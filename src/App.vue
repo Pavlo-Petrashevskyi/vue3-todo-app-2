@@ -62,31 +62,33 @@ export default {
   },
   methods: {
     handleSubmits() {
-      // if (this.title) {
-      //   this.todos.push({
-      //     id: Date.now(),
-      //     title: this.title,
-      //     completed: false,
-      //   });
-
-      //   this.title = '';
-      // }
-      createTodo(this.title)
+      if (this.title) {
+        createTodo(this.title)
         .then(({ data }) => {
           this.todos.push(data)
           this.title = '';
         })
+        .catch(() => {
+          this.errorMessage = 'Unable to create todo'
+        })
+      }
     },
     updateTodo({ id, title, completed }) {
       updateTodo({ id, title, completed})
         .then(({ data }) => {
           this.todos = this.todos.map(todo => todo.id !== id ? todo : data)
         })
+        .catch(() => {
+          this.errorMessage = 'Unable to update todo'
+        })
     },
     deleteTodo(todoId) {
       deleteTodo(todoId)
         .then(() => {
           this.todos = this.todos.filter(todo => todo.id !== todoId)
+        })
+        .catch(() => {
+          this.errorMessage = 'Unable to delete todo'
         })
     },
   }
